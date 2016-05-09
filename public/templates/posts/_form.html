@@ -1,0 +1,22 @@
+<div class="form-group" ng-class="{'has-error' : submitted && postForm.title.$invalid}">
+    <label class="control-label col-md-3">Title<span class="required">* </span> </label>
+    <div class="col-md-4">
+        <input type="text" name="title" class="form-control" ng-model="post.title" required placeholder="title"/>
+    </div>
+    <p ng-show=" submitted && postForm.title.$invalid" class="help-block">title is required.</p>
+</div>
+<div class="form-group" ng-class="{'has-error' : submitted && postForm.description.$invalid}">
+    <label class="control-label col-md-3">Description <span class="required">* </span> </label>
+    <div class="col-md-4">
+        <input type="text" name="description" class="form-control" ng-model="post.description" required placeholder="last name"/>
+    </div>
+    <p ng-show=" submitted && postForm.description.$invalid" class="help-block">Last name is required.</p>
+</div>
+
+<div class="form-group">
+    <div class="pull-left">
+        <a class="btn btn-default" href="/"> Back</a>
+        <button type="submit" class="btn btn-primary" ng-click="submitted=true">Submit</button>
+    </div>
+</div>
+
