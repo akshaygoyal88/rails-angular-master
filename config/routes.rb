@@ -6,16 +6,19 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   resources :users
-
+  get '/sign_in'  => 'authors#sign_in'
   root 'users#index'
 
-#   namespace :api do
-#     scope :v1 do
-#   mount_devise_token_auth_for 'Author', at: 'auth', skip: [:omniauth_callbacks]
-# end
-# end
-mount_devise_token_auth_for 'Author', at: 'auth'
+  #   namespace :api do
+  #     scope :v1 do
+  #   mount_devise_token_auth_for 'Author', at: 'auth', skip: [:omniauth_callbacks]
+  # end
+  # end
+  devise_for :authors
 
+     namespace :api do
+      mount_devise_token_auth_for 'Author', at: 'auth'
+    end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

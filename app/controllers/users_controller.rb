@@ -2,6 +2,8 @@ class UsersController < ApplicationController
   before_action :get_user, except: [:index, :create]
   respond_to :html, :json
 
+   # before_action :authenticate_current_user,:only=>[:index]
+
   def index
     @user = User.all
     respond_with(@users) do |format|

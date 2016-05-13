@@ -1,5 +1,30 @@
-var myApp = angular.module('myapplication', ['ngRoute', 'ngResource']); 
 
+/**
+ * @ngdoc overview
+ * @name fakeLunchHubApp
+ * @description
+ * # fakeLunchHubApp
+ *
+ * Main module of the application.
+ */
+var myApp = angular.module('myapplication', [
+   // 'ngAnimate',
+    // 'ngCookies',
+    'ngResource',
+    'ngRoute',
+    // 'ngSanitize',
+    // 'ngTouch',
+    'ng-token-auth'
+  ]);
+
+myApp.config(function($authProvider) {
+  $authProvider.configure({
+    apiUrl: 'http://localhost:3000/',
+    authProviderPaths: {
+      github: '/api/auth/github' // <-- note that this is different than what was set with github
+    }
+  });
+});
 //Factory
 myApp.factory('Users', ['$resource',function($resource){
   return $resource('/users.json', {},{
@@ -43,6 +68,49 @@ myApp.controller("UserListCtr", ['$scope', '$http', '$resource', 'Users', 'User'
         $location.path('/');
       });
     }
+  };
+}]);
+
+myApp.controller("UserSessionsCtrl", ['$scope', '$http', '$resource', '$location', '$auth', function($scope, $http, $resource, $location, $auth) {
+  $scope.$on('auth:login-error', function(ev, reason) {
+    $scope.error = reason.errors[0];
+  });
+
+  $scope.login_github = function() {
+      $auth.authenticate('github', {
+      params: {
+        favorite_color: $scope.favoriteColor
+      }
+    });
+  };
+
+
+}]);
+
+
+
+myApp.run(['$rootScope', '$location', function($rootScope, $location) {
+  $rootScope.$on('auth:login-success', function() {
+    $location.path('/users');
+  });
+  $rootScope.$on('auth:logout-success', function() {
+    $location.path('/sign_in');
+  });
+}]);
+
+
+myApp.controller('UserRegistrationsCtrl', ['$scope', '$location', '$auth', function ($scope, $location, $auth) {
+  $scope.$on('auth:registration-email-error', function(ev, reason) {
+    $scope.error = reason.errors.full_messages;
+  });
+  $scope.handleRegBtnClick = function() {
+    $auth.submitRegistration($scope.registrationForm)
+      .then(function() { 
+        $auth.submitLogin({
+          email: $scope.registrationForm.email,
+          password: $scope.registrationForm.password
+        });
+      });
   };
 }]);
 
@@ -158,8 +226,16 @@ myApp.config([
       templateUrl: '/templates/posts/index.html',
       controller: 'PostListCtr'
     });
+    $routeProvider.when('/sign_in', {
+      templateUrl: '/templates/user_sessions/new.html',
+      controller: 'UserSessionsCtrl'
+    })
+    $routeProvider.when('/sign_up', {
+      templateUrl: '/templates/user_registrations/new.html',
+      controller: 'UserRegistrationsCtrl'
+    })
     $routeProvider.otherwise({
-      redirectTo: '/users'
+      redirectTo: '/sign_in'
     });
   }
 ]);
