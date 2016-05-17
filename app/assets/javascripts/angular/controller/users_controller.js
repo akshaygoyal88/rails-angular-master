@@ -16,15 +16,6 @@ var myApp = angular.module('myapplication', [
     // 'ngTouch',
     'ng-token-auth'
   ]);
-
-myApp.config(function($authProvider) {
-  $authProvider.configure({
-    apiUrl: 'http://localhost:3000/',
-    authProviderPaths: {
-      github: '/api/auth/github' // <-- note that this is different than what was set with github
-    }
-  });
-});
 //Factory
 myApp.factory('Users', ['$resource',function($resource){
   return $resource('/users.json', {},{
@@ -83,6 +74,14 @@ myApp.controller("UserSessionsCtrl", ['$scope', '$http', '$resource', '$location
       }
     });
   };
+  $scope.login_fb = function() {
+      $auth.authenticate('facebook', {
+      params: {
+        favorite_color: $scope.favoriteColor
+      }
+    });
+  };
+
 
 
 }]);
@@ -203,6 +202,8 @@ myApp.controller("PostAddCtr", ['$scope', '$resource', 'Posts', '$location', fun
 }]);
 
 
+
+
 //Routes
 myApp.config([
   '$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -210,6 +211,8 @@ myApp.config([
       templateUrl: '/templates/users/index.html',
       controller: 'UserListCtr'
     });
+    // $locationProvider.html5Mode(true);
+      
     $routeProvider.when('/users/new', {
       templateUrl: '/templates/users/new.html',
       controller: 'UserAddCtr'
@@ -235,8 +238,17 @@ myApp.config([
       controller: 'UserRegistrationsCtrl'
     })
     $routeProvider.otherwise({
-      redirectTo: '/sign_in'
+      redirectTo: '/users'
     });
   }
 ]);
 
+myApp.config(function($authProvider) {
+  return $authProvider.configure({
+    apiUrl: '',
+    authProviderPaths: {
+      github: '/auth/github',
+      facebook: '/auth/facebook'
+    }
+  });
+});

@@ -11,31 +11,38 @@ class ApplicationController < ActionController::Base
     cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
   end
 
-  def authenticate_current_user
-    if get_current_user.nil?
-      # head :unauthorized 
-      redirect_to sign_in_path
+  def authenticate_current_user par
+    
+    if params[:format]!="json"
+      if get_current_user(par).nil?
+        # head :unauthorized 
+        redirect_to sign_in_path
+      end
     end
   end
 
-  def get_current_user
-    return nil unless cookies[:auth_headers]
-    auth_headers = JSON.parse(cookies[:auth_headers])
+  def get_current_user par
+    if par[:client_id].present? # session[:user_id].present?
+       # sign_in(:user, @resource, store: false, bypass: false)
+      # @current_user =  Author.find_by(id: session[:user_id])
+      @current_user = Author.where("tokens LIKE ?","%#{par[:client_id]}%").first
+        
+    else
+      return nil unless cookies[:auth_headers]
+      auth_headers = JSON.parse(cookies[:auth_headers]) || cookies[:auth_headers]
 
-    expiration_datetime = DateTime.strptime(auth_headers["expiry"], "%s")
-    current_user = Author.find_by(uid: auth_headers["uid"])
+      expiration_datetime = DateTime.strptime(auth_headers["expiry"], "%s")
+      current_user = Author.find_by(uid: auth_headers["uid"])
+      
+      if current_user &&
+         current_user.tokens.has_key?(auth_headers["client"]) &&
+         expiration_datetime > DateTime.now
 
-
-    user = User.create_with_omniauth(env["omniauth.auth"])
-    session[:user_id] = user.id
-    
-    if current_user &&
-       current_user.tokens.has_key?(auth_headers["client"]) &&
-       expiration_datetime > DateTime.now
-
-      @current_user = current_user
+        @current_user = current_user
+      end
+      @current_user
     end
-    @current_user
+    
   end
 
   protected

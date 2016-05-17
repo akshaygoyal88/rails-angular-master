@@ -8,17 +8,21 @@ Rails.application.routes.draw do
   resources :users
   get '/sign_in'  => 'authors#sign_in'
   root 'users#index'
-
+  # post '/omniauth/:provider/callback', to: 'devise_token_auth/omniauth_callbacks#redirect_callbacks'
+  # get '/omniauth/:provider/callback', to: 'sessions#create'
   #   namespace :api do
   #     scope :v1 do
   #   mount_devise_token_auth_for 'Author', at: 'auth', skip: [:omniauth_callbacks]
   # end
   # end
-  devise_for :authors
+  # devise_for :authors
 
-     namespace :api do
-      mount_devise_token_auth_for 'Author', at: 'auth'
-    end
+     # namespace :api do
+      mount_devise_token_auth_for 'Author', at: 'auth', controllers: {
+        token_validations:  'overrides/token_validations',
+        omniauth_callbacks: 'overrides/omniauth_callbacks'
+      }
+    # end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

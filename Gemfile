@@ -30,11 +30,12 @@ gem 'byebug'
 gem 'spring',        group: :development
  gem 'web-console', '~> 2.0',        group: :development
 gem 'devise_token_auth'
-gem 'devise'
+# gem 'devise'
 
 # omniauth providers
+gem 'omniauth'
+gem 'omniauth-facebook'
 gem 'omniauth-github',        :git => 'git://github.com/intridea/omniauth-github.git'
-gem 'omniauth-facebook',      :git => 'git://github.com/mkdynamic/omniauth-facebook.git'
 gem 'omniauth-google-oauth2', :git => 'git://github.com/zquestz/omniauth-google-oauth2.git'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
