@@ -1,5 +1,5 @@
 
-<div class="alert alert-danger" role="alert" ng-show="error">
+<div ng-init="user_signed_in();" class="alert alert-danger" role="alert" ng-show="error">
   {{error}}
 </div>
 <form ng-submit="submitLogin(loginForm)" role="form" ng-init="loginForm = {}">

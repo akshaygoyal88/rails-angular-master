@@ -1,7 +1,7 @@
 <br/>
-<div class="row">
+<div class="row" ng-init="user_signed_in()">
     <div class="col-md-12">
-        <a class="btn btn-primary" href="#/users/new">Create a user</a>
+        <a class="btn btn-primary" href="/users/new">Create a user</a>
         <h3 class="block">Users</h3>
         <table class="table table-striped">
             <tr>
@@ -20,14 +20,14 @@
                 <td>{{user.email}}</td>
                 <td>{{user.phone}}</td>
                 <td>
-                    <a href="#/users/{{user.id}}/edit">Edit</a> | <a href="" ng-click="deleteUser(user.id)">Remove</a>
+                    <a href="/users/{{user.id}}/edit">Edit</a> | <a href="" ng-click="deleteUser(user.id)">Remove</a>
                 </td>
             </tr>
         </table>
     </div>
-    <a href="#/posts">Posts list</a>
+    <a href="/posts">Posts list</a>
 </div>
 <div class="row">
-  <li ng-show="!user.id"><a ng-href="#/sign_in">Sign in</a></li> 
+  <li ng-show="!user.id"><a ng-href="/sign_in">Sign in</a></li> 
   <li ng-show="user.id"><a ng-click='signOut()'>Sign out</a></li>
 </div>

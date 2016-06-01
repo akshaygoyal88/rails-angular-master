@@ -60,6 +60,11 @@ myApp.controller("UserListCtr", ['$scope', '$http', '$resource', 'Users', 'User'
       });
     }
   };
+  $scope.user_signed_in = function(){
+    if (!$scope.user.id) {
+      $location.path('/sign_in').replace();
+    }
+  }
 }]);
 
 myApp.controller("UserSessionsCtrl", ['$scope', '$http', '$resource', '$location', '$auth', function($scope, $http, $resource, $location, $auth) {
@@ -74,6 +79,11 @@ myApp.controller("UserSessionsCtrl", ['$scope', '$http', '$resource', '$location
       }
     });
   };
+  $scope.user_signed_in = function(){
+    if ($scope.user.id) {
+      $location.path('/users').replace();
+    }
+  }
   $scope.login_fb = function() {
       $auth.authenticate('facebook', {
       params: {
@@ -94,6 +104,9 @@ myApp.run(['$rootScope', '$location', function($rootScope, $location) {
   });
   $rootScope.$on('auth:logout-success', function() {
     $location.path('/sign_in');
+  });
+  $rootScope.$on('auth:logout-error', function() {
+    $location.path('/sign_in?');
   });
 }]);
 
@@ -240,10 +253,11 @@ myApp.config([
     $routeProvider.otherwise({
       redirectTo: '/users'
     });
+    $locationProvider.html5Mode(true);
   }
 ]);
 
-myApp.config(function($authProvider) {
+myApp.config(function($authProvider,$locationProvider) {
   return $authProvider.configure({
     apiUrl: '',
     authProviderPaths: {

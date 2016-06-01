@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         omniauth_callbacks: 'overrides/omniauth_callbacks'
       }
     # end
+  # get '*path' => "authors#index"
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
