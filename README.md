@@ -1,6 +1,6 @@
 <h3>Rails4 + AngularJS </h3>
-
-Check demo app <a href="https://rails4-crud-with-angularjs.herokuapp.com">here</a>.
+<p>This is example app for using gem devise_auth_token </p>
+<!-- Check demo app <a href="https://rails4-crud-with-angularjs.herokuapp.com">here</a>.
 
 1. CRUD example using Rails4 + AngularJS
  
@@ -13,3 +13,4 @@ Check demo app <a href="https://rails4-crud-with-angularjs.herokuapp.com">here</
 
 <h3>License</h3>
 <p>This is released under the MIT license.</p>
+ -->
